@@ -21,7 +21,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: black;
 }
 
 .App-link {
@@ -35,4 +35,29 @@
   to {
     transform: rotate(360deg);
   }
+}
+/* 🔥 FORCE FIX FOR INPUT */
+input {
+  color: black !important;
+  background-color: white !important;
+  border: 1px solid black !important;
+  padding: 8px;
+}
+
+/* 🔥 FORCE FIX FOR BUTTON */
+button {
+  color: black !important;
+  background-color: lightgray !important;
+  border: 1px solid black !important;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+/* 🔥 FORCE PLACEHOLDER */
+input::placeholder {
+  color: gray !important;
+}
+.App-header input,
+.App-header button {
+  color: black !important;
 }
