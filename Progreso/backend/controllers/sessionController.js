@@ -1,5 +1,5 @@
 const Session = require("../models/session");
-const User = require("../models/User");
+const User = require("../models/user");
 const { calculateXP } = require("../utils/xpCalculator");
 
 // START SESSION
