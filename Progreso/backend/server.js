@@ -3,7 +3,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
-
+app.use("/api/session", require("./routes/sessionRoutes"));
+app.use("/api/analytics", require("./routes/analyticsRoutes"));
 // ===== CONFIG =====
 dotenv.config();
 const app = express();
