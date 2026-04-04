@@ -5,10 +5,31 @@ const User = require("../models/User");
 // POST → Signup user
 router.post("/signup", async (req, res) => {
     try {
-        const user = new User(req.body);
+        const {
+            name,
+            email,
+            focusDuration,
+            preferredSession,
+            soundPreference,
+            distractions,
+            motivationType
+        } = req.body;
+
+        const user = new User({
+            name: name || "Anonymous",
+            email: email || "noemail@test.com",
+            focusDuration: focusDuration || "",
+            preferredSession: preferredSession || "",
+            soundPreference: soundPreference || "",
+            distractions: distractions || [],
+            motivationType: motivationType || []
+        });
+
         await user.save();
+
         res.status(201).json(user);
     } catch (err) {
+        console.error("Signup Error:", err);
         res.status(500).json({ error: err.message });
     }
 });
