@@ -1,6 +1,6 @@
 const Session = require("../models/session");
-const User = require("../models/user");
-const { calculateXP } = require("../utils/xpCalculator");
+const User = require("../models/User");
+const { calculateXP } = require("../xpCalculator"); // ✅ FIXED PATH
 
 // START SESSION
 exports.startSession = async (req, res) => {

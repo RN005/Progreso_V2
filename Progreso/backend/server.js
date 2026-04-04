@@ -1,33 +1,30 @@
-// ===== IMPORTS =====
 const express = require("express");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
 const cors = require("cors");
-app.use("/api/session", require("./routes/sessionRoutes"));
-app.use("/api/analytics", require("./routes/analyticsRoutes"));
-// ===== CONFIG =====
-dotenv.config();
+
 const app = express();
 
-// ===== MIDDLEWARE =====
+// ✅ BETTER CORS CONFIG (important)
 app.use(cors());
+
 app.use(express.json());
 
-// ===== ROUTES =====
+// Routes
+app.use("/api/session", require("./routes/sessionRoutes"));
+app.use("/api/analytics", require("./routes/analyticsRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 
-// ===== DATABASE CONNECTION =====
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("DB Connected"))
-    .catch(err => console.log(err));
+// MongoDB Connection
+mongoose.connect("mongodb://127.0.0.1:27017/Progreso")
+  .then(() => console.log("MongoDB Connected ✅"))
+  .catch((err) => console.log(err));
 
-// ===== TEST ROUTE =====
+// Test Route
 app.get("/", (req, res) => {
-    res.send("API Running 🚀");
+  res.send("API Running 🚀");
 });
 
-// ===== START SERVER =====
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// Start Server
+app.listen(5000, () => {
+  console.log("Server running on port 5000 🚀");
 });
