@@ -19,9 +19,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* ✅ changed */
+  padding-top: 40px; /* ✅ added spacing */
   font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link {
@@ -35,4 +35,14 @@
   to {
     transform: rotate(360deg);
   }
+}
+button {
+  color: black;
+}
+button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
 }
