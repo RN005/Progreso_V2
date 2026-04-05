@@ -1,15 +1,15 @@
-import Signup from "./pages/Signup";
+// frontend/src/App.js
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import WorkPage from "./pages/WorkPage";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/work" element={<WorkPage />} />
+        <Route path="/" element={<Dashboard />} />      {/* Default Dashboard */}
+        <Route path="/work" element={<WorkPage />} />  {/* Work Page */}
       </Routes>
     </Router>
   );
