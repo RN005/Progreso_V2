@@ -4,19 +4,44 @@ const Session = require("../models/session");
 const User = require("../models/User");
 const { calculateXP } = require("../utils/xpCalculator"); // ✅ import fixed
 
-// START SESSION
+// ================================
+// START STUDY SESSION
+// POST /api/sessions/start
+// ================================
 exports.startSession = async (req, res) => {
     try {
+        const { userId, duration } = req.body;
+
+        // validation
+        if (!userId || !duration) {
+            return res.status(400).json({
+                success: false,
+                message: "userId and duration are required"
+            });
+        }
+
         const session = new Session({
-            userId: req.body.userId,
-            duration: req.body.duration,
+            userId,
+            duration,
             completed: false,
+            startedAt: new Date()
         });
 
         await session.save();
-        res.json(session);
+
+        res.status(201).json({
+            success: true,
+            message: "Session started successfully",
+            data: session
+        });
+
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error("Start Session Error:", err);
+        res.status(500).json({
+            success: false,
+            message: "Failed to start session",
+            error: err.message
+        });
     }
 };
 
@@ -67,12 +92,27 @@ exports.endSession = async (req, res) => {
     }
 };
 
-// GET USER SESSIONS
+// ================================
+// GET ALL USER SESSIONS
+// GET /api/sessions/user/:id
+// ================================
 exports.getUserSessions = async (req, res) => {
     try {
-        const sessions = await Session.find({ userId: req.params.id });
-        res.json(sessions);
+        const sessions = await Session.find({ userId: req.params.id })
+            .sort({ createdAt: -1 });
+
+        res.json({
+            success: true,
+            count: sessions.length,
+            data: sessions
+        });
+
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error("Get Sessions Error:", err);
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch sessions",
+            error: err.message
+        });
     }
 };
