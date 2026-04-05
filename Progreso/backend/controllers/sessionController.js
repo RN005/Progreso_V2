@@ -1,6 +1,8 @@
+
+
 const Session = require("../models/session");
-const User = require("../models/user");
-const { calculateXP } = require("../xpCalculator"); // ⭐ correct path now
+const User = require("../models/User");
+const { calculateXP } = require("../utils/xpCalculator"); // ✅ import fixed
 
 // ================================
 // START STUDY SESSION
@@ -43,71 +45,50 @@ exports.startSession = async (req, res) => {
     }
 };
 
-// ================================
-// END SESSION + GIVE XP ⭐
-// POST /api/sessions/end
-// ================================
+// END SESSION + GIVE XP ⭐ (FINAL FIXED VERSION)
 exports.endSession = async (req, res) => {
     try {
-        const { sessionId } = req.body;
+        console.log("🔥 END SESSION API HIT");
+        console.log("BODY:", req.body);
+
+        const { sessionId, duration } = req.body;
 
         if (!sessionId) {
-            return res.status(400).json({
-                success: false,
-                message: "sessionId is required"
-            });
+            return res.status(400).json({ message: "No sessionId received" });
         }
 
-        const session = await Session.findById(sessionId);
+        // ✅ FIXED XP CALCULATION USING xpCalculator
+        const xp = calculateXP(duration); 
+        console.log("XP CALCULATED:", xp);
 
-        if (!session) {
-            return res.status(404).json({
-                success: false,
-                message: "Session not found"
-            });
+        // 🔥 FORCE UPDATE IN DB
+        const updatedSession = await Session.findByIdAndUpdate(
+            sessionId,
+            { completed: true, duration, xp },
+            { new: true }
+        );
+
+        console.log("UPDATED SESSION:", updatedSession);
+
+        if (!updatedSession) {
+            return res.status(404).json({ message: "Session NOT FOUND" });
         }
 
-        // prevent double XP bug 🚨
-        if (session.completed) {
-            return res.status(400).json({
-                success: false,
-                message: "Session already completed"
-            });
-        }
-
-        session.completed = true;
-        session.endedAt = new Date();
-        await session.save();
-
-        // ===== XP CALCULATION =====
-        const xpEarned = calculateXP(session.duration);
-
-        const user = await User.findById(session.userId);
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "User not found"
-            });
-        }
-
-        user.xp += xpEarned;
+        // ✅ update user XP
+        const user = await User.findById(updatedSession.userId);
+        if (!user.xp) user.xp = 0; // safety check
+        user.xp += xp;
         await user.save();
 
         res.json({
-            success: true,
-            message: "Session ended successfully",
-            xpEarned,
-            totalXP: user.xp,
-            session
+            message: "Session ended",
+            session: updatedSession,
+            xp: xp,
         });
 
     } catch (err) {
-        console.error("End Session Error:", err);
-        res.status(500).json({
-            success: false,
-            message: "Failed to end session",
-            error: err.message
-        });
+        console.error("END SESSION ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
 };
 
