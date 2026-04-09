@@ -11,3 +11,30 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+/* ✅ FIX ALL TEXT VISIBILITY */
+body {
+  color: black;
+  background-color: white;
+}
+
+/* ✅ INPUT FIX */
+input {
+  color: black !important;
+  background-color: white !important;
+  border: 1px solid black;
+  padding: 8px;
+}
+
+/* ✅ BUTTON FIX */
+button {
+  color: black !important;
+  background-color: lightgray !important;
+  border: 1px solid black;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+/* ✅ PLACEHOLDER FIX */
+input::placeholder {
+  color: gray !important;
+}
